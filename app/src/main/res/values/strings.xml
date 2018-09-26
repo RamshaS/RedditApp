@@ -1,5 +1,9 @@
 <resources>
     <string name="app_name">Reddit App</string>
+    <string name="package_name">com.udacity.ramshasaeed.redditapp</string>
+    <string translatable="false" name="first_run">firstrun</string>
+    <string translatable="false" name="subreddit_pref_key">SUBREDDIT_PREF_KEY</string>
+    <string translatable="false" name="initial_subs">home,all,announcements,Art,AskReddit,askscience,aww,blog,books,creepy,dataisbeautiful,DIY,Documentaries,EarthPorn,explainlikeimfive,Fitness,food,funny,Futurology,gadgets,gaming,GetMotivated,gifs,history,IAmA,InternetIsBeautiful,Jokes,LifeProTips,listentothis,mildlyinteresting,movies,Music,news,nosleep,nottheonion,OldSchoolCool,personalfinance,philosophy,photoshopbattles,pics,science,Showerthoughts,space,sports,television,tifu,todayilearned,TwoXChromosomes,UpliftingNews,videos,worldnews,WritingPrompts</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="nav_header_title">Android Studio</string>
