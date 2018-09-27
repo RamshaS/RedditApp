@@ -29,7 +29,7 @@ public class reddit_list_adapter extends RecyclerView.Adapter<reddit_list_adapte
 
     private int focusedItem = 0;
 
-    public reddit_list_adapter(List<Reddit> list, Context context) {
+    public reddit_list_adapter(Context context, List<Reddit> list) {
         this.list = list;
         this.context = context;
     }
@@ -86,6 +86,9 @@ public class reddit_list_adapter extends RecyclerView.Adapter<reddit_list_adapte
         public void onItemClick(View view, int position);
    }
 
+    public List<Reddit> getListItems(){
+        return list;
+    }
     public void SetOnItemClickListener(final OnItemClickListener itemClickListener) {
         this.itemClickListener = itemClickListener;
     }
