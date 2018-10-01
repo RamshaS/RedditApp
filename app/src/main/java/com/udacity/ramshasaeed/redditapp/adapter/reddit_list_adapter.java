@@ -109,4 +109,14 @@ public class reddit_list_adapter extends RecyclerView.Adapter<reddit_list_adapte
             notifyDataSetChanged();
         }
     }
+    public void updateList(List<Reddit> redditList)
+    {
+        if(list != null){
+            list.clear();
+        }
+//        this.list = redditList;
+        this.list.addAll(redditList);
+        notifyDataSetChanged();
+    }
+
 }

@@ -51,7 +51,7 @@ public class MainActivity extends AppCompatActivity
     SharedPreferences prefs;
     private String subReddit = "";
     private int counter = 0;
-    private ArrayList<Reddit> list = new ArrayList<Reddit>();
+    public List<Reddit> list = new ArrayList<Reddit>();
     Parcelable mListState;
     private reddit_list_adapter adapter;
     private boolean mTwoPane;
@@ -202,8 +202,8 @@ break;
                             }
                             if (list == null) {
                                 list = new ArrayList<>();
-                            }
-                            list.add(item);
+                            }list
+                            .add(item);
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -212,8 +212,8 @@ break;
                     }
 
                     // Update list by notifying the adapter of changes
-                    adapter.notifyDataSetChanged();
-
+//                    adapter.notifyDataSetChanged();
+                    adapter.updateList(list);
 
                 }
 
@@ -224,6 +224,7 @@ break;
                 Toast.makeText(MainActivity.this, "Sorry Couldn't fetch data", Toast.LENGTH_SHORT).show();
             }
         });
+        adapter.updateList(list);
         if(mTwoPane){
             if(list!=null && list.size()!=0){
                 startFragment(list.get(0));
