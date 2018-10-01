@@ -27,15 +27,22 @@ import com.udacity.ramshasaeed.redditapp.adapter.reddit_list_adapter;
 import com.udacity.ramshasaeed.redditapp.databinding.ActivityMainBinding;
 import com.udacity.ramshasaeed.redditapp.databinding.ContentMainBinding;
 import com.udacity.ramshasaeed.redditapp.model.Reddit;
+import com.udacity.ramshasaeed.redditapp.services.RetrofitClient;
 import com.udacity.ramshasaeed.redditapp.util.Constants;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -103,6 +110,8 @@ public class MainActivity extends AppCompatActivity
     public void updateList(String subreddit) {
 
         this.subReddit = subreddit;
+        int casenum;
+
         counter = 0;
         bi.appBarMain.toolbar.setTitle(subreddit);
         String subRedditSortBy = "";
@@ -114,23 +123,113 @@ public class MainActivity extends AppCompatActivity
             mSearchView.setIconified(true);
         }
         if (subreddit.equals(getResources().getString(R.string.HomePage))) {
-            subreddit = Constants.redditUrl + Constants.jsonEnd;
+            subreddit = Constants.jsonEnd;
+            casenum = 1;
             toggleSort(false);
         } else {
             toggleMenu(true);
-            subreddit = Constants.redditUrl + Constants.subredditUrl + subreddit + subRedditSortBy + Constants.jsonEnd;
+            casenum = 2;
+            subreddit =   subreddit + subRedditSortBy + Constants.jsonEnd;
         }
 
-        updateListFromUrl(subreddit);
+        updateListFromUrl(casenum,subreddit);
 
     }
 
-    public void updateListFromUrl(String url) {
-        Log.d(LOG_TAG, url);
+    public void updateListFromUrl(int url_call_case, String searchKeyword) {
+       // Log.d(LOG_TAG, url);
 
         adapter = new reddit_list_adapter(this, list);
         bi.appBarMain.contentMain.rvRedditList.setAdapter(adapter);
         adapter.SetOnItemClickListener(adapterClick);
+        Call<ResponseBody> call;
+
+        switch (url_call_case){
+            case 1:
+                call = RetrofitClient.api.getAll(searchKeyword);
+                break;
+            case 2:
+                call = RetrofitClient.api.getHome(searchKeyword);
+
+                break;
+            case 3:
+                call = RetrofitClient.api.getSearchqueryResult(searchKeyword);
+                break;
+                default:
+                    call = RetrofitClient.api.getHome("home.json");
+break;
+        }
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                Toast.makeText(MainActivity.this, "Completed!", Toast.LENGTH_SHORT).show();
+
+                if (response.isSuccessful()) {
+                    try {
+                        //JSONObject data = response.getJSONObject("data");
+                        String resp = response.body().string();
+                        JSONObject data = new JSONObject(resp);
+
+                     //   after_id = data.getString("after");
+                        JSONArray children = data.getJSONArray("children");
+
+                        for (int i = 0; i < children.length(); i++) {
+
+                            JSONObject post = children.getJSONObject(i).getJSONObject("data");
+                            Reddit item = new Reddit();
+                            item.setTitle(post.getString("title"));
+                            item.setThumbnail(post.getString("thumbnail"));
+                            item.setUrl(post.getString("url"));
+                            item.setSubreddit(post.getString("subreddit"));
+                            item.setAuthor(post.getString("author"));
+                            item.setNumComments(post.getInt("num_comments"));
+                            item.setScore(post.getInt("score"));
+                            item.setOver18(post.getBoolean("over_18"));
+                            item.setPermalink(post.getString("permalink"));
+                            item.setPostedOn(post.getLong("created_utc"));
+                            item.setId(post.getString("id"));
+                            try {
+                                Log.i(LOG_TAG, post.getJSONObject("preview").getJSONArray("images").getJSONObject(0).getJSONObject("source").getString("url"));
+                                item.setImageUrl(post.getJSONObject("preview").getJSONArray("images").getJSONObject(0).getJSONObject("source").getString("url"));
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                            if (list == null) {
+                                list = new ArrayList<>();
+                            }
+                            list.add(item);
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
+                    // Update list by notifying the adapter of changes
+                    adapter.notifyDataSetChanged();
+
+                    try {
+                        String data = response.body().string();
+                        JSONArray jsonArray = new JSONArray(data);
+                        for (int i = 0; i < jsonArray.length(); i++) {
+                            Log.d(LOG_TAG, "onResponse: posts " + jsonArray.get(i));
+                        }
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                Toast.makeText(MainActivity.this, "Sorry Couldn't fetch data", Toast.LENGTH_SHORT).show();
+            }
+        });
 /*
         RequestQueue queue = Volley.newRequestQueue(this);
 
@@ -286,16 +385,19 @@ public class MainActivity extends AppCompatActivity
     }
     public void updateList(String subreddit, String searchQuery) {
         this.subReddit = subreddit;
+        int casenum;
         bi.appBarMain.toolbar.setTitle(subreddit);
         String searchQuerySetup = Constants.searchJson + "?q=" + searchQuery;
         if (subreddit.equals(getResources().getString(R.string.HomePage))) {
-            subreddit = Constants.redditUrl + searchQuerySetup;
+            subreddit = searchQuery;
+            casenum = 3;
             toggleSort(false);
         } else {
             toggleMenu(true);
-            subreddit = Constants.redditUrl + Constants.subredditUrl + subreddit + "/"+searchQuerySetup;
+            subreddit = subreddit + "/"+searchQuerySetup;
+            casenum = 2;
         }
-        updateListFromUrl(subreddit);
+        updateListFromUrl(casenum,subreddit);
     }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

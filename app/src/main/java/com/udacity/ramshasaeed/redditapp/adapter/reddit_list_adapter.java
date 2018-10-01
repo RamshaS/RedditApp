@@ -2,7 +2,9 @@ package com.udacity.ramshasaeed.redditapp.adapter;
 
 import android.content.Context;
 import android.databinding.DataBindingUtil;
+import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.view.LayoutInflater;
@@ -13,6 +15,10 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
+import com.bumptech.glide.request.RequestListener;
 import com.udacity.ramshasaeed.redditapp.R;
 import com.udacity.ramshasaeed.redditapp.databinding.AdapterRedditListBinding;
 import com.udacity.ramshasaeed.redditapp.model.Reddit;
@@ -60,6 +66,9 @@ public class reddit_list_adapter extends RecyclerView.Adapter<reddit_list_adapte
         protected RelativeLayout recLayout;
         protected TextView author;
         protected TextView subreddit, score, comments;
+        protected ImageView imageView;
+
+
        AdapterRedditListBinding bi;
         public ListRowViewHolder(View itemView) {
            super(itemView);
@@ -79,7 +88,9 @@ public class reddit_list_adapter extends RecyclerView.Adapter<reddit_list_adapte
             holder.subreddit.setText("r/"+Html.fromHtml(reddit.getSubreddit()));
             holder.comments.setText(Html.fromHtml(String.valueOf(reddit.getNumComments())));
             holder.score.setText(Html.fromHtml(String.valueOf(reddit.getScore())));
-
+            Glide.with(context)
+                    .load(reddit.getThumbnail())
+                    .into(holder.imageView);
         }
    }
    public interface OnItemClickListener{
