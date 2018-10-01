@@ -10,6 +10,7 @@ import android.os.Parcelable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.view.MenuItemCompat;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.SearchView;
 import android.util.Log;
 import android.view.View;
@@ -67,6 +68,7 @@ public class MainActivity extends AppCompatActivity
 
         setSupportActionBar( bi.appBarMain.toolbar);
         prefs = this.getSharedPreferences(getString(R.string.package_name), Context.MODE_PRIVATE);
+        RetrofitClient.getInstance();
 
         setSubrreddits();
         bi.appBarMain.fab.setOnClickListener(new View.OnClickListener() {
@@ -91,7 +93,9 @@ public class MainActivity extends AppCompatActivity
             list = savedInstanceState.getParcelableArrayList(getString(R.string.listitems));
             mListState = savedInstanceState.getParcelable(getString(R.string.liststate_key));
             adapter = new reddit_list_adapter(this,list);
-
+            LinearLayoutManager llm = new LinearLayoutManager(this);
+            llm.setOrientation(LinearLayoutManager.VERTICAL);
+            bi.appBarMain.contentMain.rvRedditList.setLayoutManager(llm);
             bi.appBarMain.contentMain.rvRedditList.setAdapter(adapter);
             adapter.SetOnItemClickListener(adapterClick);
         }
@@ -124,7 +128,7 @@ public class MainActivity extends AppCompatActivity
         }
         if (subreddit.equals(getResources().getString(R.string.HomePage))) {
             subreddit = Constants.jsonEnd;
-            casenum = 1;
+            casenum = 2;
             toggleSort(false);
         } else {
             toggleMenu(true);
@@ -149,14 +153,14 @@ public class MainActivity extends AppCompatActivity
                 call = RetrofitClient.api.getAll(searchKeyword);
                 break;
             case 2:
-                call = RetrofitClient.api.getHome(searchKeyword);
+                call = RetrofitClient.api.getHome(Constants.subredditUrl+searchKeyword);
 
                 break;
             case 3:
                 call = RetrofitClient.api.getSearchqueryResult(searchKeyword);
                 break;
                 default:
-                    call = RetrofitClient.api.getHome("home.json");
+                    call = RetrofitClient.api.getHome(Constants.subredditUrl+"home.json");
 break;
         }
         call.enqueue(new Callback<ResponseBody>() {
@@ -330,9 +334,10 @@ break;
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
+        getMenuInflater().inflate(R.menu.sort_menu, menu);
         this.sortMenu = menu;
-        mSearchView = (SearchView) MenuItemCompat.getActionView(menu.findItem(R.id.menuSearch));
+        MenuItem search = menu.findItem(R.id.menuSearch);
+        mSearchView= (SearchView) search.getActionView();
         setupSearchView(mSearchView);
         toggleSort(false);
         return true;
