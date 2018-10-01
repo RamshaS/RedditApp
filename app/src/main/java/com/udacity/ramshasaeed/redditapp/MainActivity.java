@@ -128,7 +128,7 @@ public class MainActivity extends AppCompatActivity
         }
         if (subreddit.equals(getResources().getString(R.string.HomePage))) {
             subreddit = Constants.jsonEnd;
-            casenum = 2;
+            casenum = 1;
             toggleSort(false);
         } else {
             toggleMenu(true);
@@ -163,6 +163,8 @@ public class MainActivity extends AppCompatActivity
                     call = RetrofitClient.api.getHome(Constants.subredditUrl+"home.json");
 break;
         }
+        adapter.clearAdapter();
+
         call.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -172,7 +174,7 @@ break;
                     try {
                         //JSONObject data = response.getJSONObject("data");
                         String resp = response.body().string();
-                        JSONObject data = new JSONObject(resp);
+                        JSONObject data = new JSONObject(resp).getJSONObject("data");
 
                      //   after_id = data.getString("after");
                         JSONArray children = data.getJSONArray("children");
@@ -212,18 +214,6 @@ break;
                     // Update list by notifying the adapter of changes
                     adapter.notifyDataSetChanged();
 
-                    try {
-                        String data = response.body().string();
-                        JSONArray jsonArray = new JSONArray(data);
-                        for (int i = 0; i < jsonArray.length(); i++) {
-                            Log.d(LOG_TAG, "onResponse: posts " + jsonArray.get(i));
-                        }
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-
 
                 }
 
@@ -234,73 +224,12 @@ break;
                 Toast.makeText(MainActivity.this, "Sorry Couldn't fetch data", Toast.LENGTH_SHORT).show();
             }
         });
-/*
-        RequestQueue queue = Volley.newRequestQueue(this);
-
-        adapter.clearAdapter();
-
-        JsonObjectRequest jsObjRequest = new JsonObjectRequest(Request.Method.GET, url, (String) null, new Response.Listener<JSONObject>() {
-
-            @Override
-            public void onResponse(JSONObject response) {
-
-                Log.d(LOG_TAG, response.toString());
-
-                // Parse json data.
-                try {
-                    JSONObject data = response.getJSONObject("data");
-                    after_id = data.getString("after");
-                    JSONArray children = data.getJSONArray("children");
-
-                    for (int i = 0; i < children.length(); i++) {
-
-                        JSONObject post = children.getJSONObject(i).getJSONObject("data");
-                        Reddit item = new Reddit();
-                        item.setTitle(post.getString("title"));
-                        item.setThumbnail(post.getString("thumbnail"));
-                        item.setUrl(post.getString("url"));
-                        item.setSubreddit(post.getString("subreddit"));
-                        item.setAuthor(post.getString("author"));
-                        item.setNumComments(post.getInt("num_comments"));
-                        item.setScore(post.getInt("score"));
-                        item.setOver18(post.getBoolean("over_18"));
-                        item.setPermalink(post.getString("permalink"));
-                        item.setPostedOn(post.getLong("created_utc"));
-                        item.setId(post.getString("id"));
-                        try {
-                            Log.i(LOG_TAG, post.getJSONObject("preview").getJSONArray("images").getJSONObject(0).getJSONObject("source").getString("url"));
-                            item.setImageUrl(post.getJSONObject("preview").getJSONArray("images").getJSONObject(0).getJSONObject("source").getString("url"));
-                        } catch (JSONException e) {
-
-                        }
-                        if (redditItemList == null) {
-                            redditItemList = new ArrayList<>();
-                        }
-                        redditItemList.add(item);
-
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-
-                // Update list by notifying the adapter of changes
-                adapter.notifyDataSetChanged();
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                VolleyLog.d(LOG_TAG, "Error: " + error.getMessage());
-
-            }
-        });
-
-        queue.add(jsObjRequest);
         if(mTwoPane){
-            if(redditItemList!=null && redditItemList.size()!=0){
-                startFragment(redditItemList.get(0));
+            if(list!=null && list.size()!=0){
+                startFragment(list.get(0));
             }
         }
-        */
+
     }
     private void setSubrreddits() {
         MenuItem saveThis = bi.navView.getMenu().getItem(0);
