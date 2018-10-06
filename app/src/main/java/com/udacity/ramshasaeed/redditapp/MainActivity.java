@@ -11,6 +11,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.util.Log;
 import android.view.View;
@@ -51,7 +52,7 @@ public class MainActivity extends AppCompatActivity
     SharedPreferences prefs;
     private String subReddit = "";
     private int counter = 0;
-    public List<Reddit> list = new ArrayList<Reddit>();
+    public List<Reddit> list;
     Parcelable mListState;
     private reddit_list_adapter adapter;
     private boolean mTwoPane;
@@ -67,6 +68,7 @@ public class MainActivity extends AppCompatActivity
         bi = DataBindingUtil.setContentView(this,R.layout.activity_main);
 
         setSupportActionBar( bi.appBarMain.toolbar);
+        list = new ArrayList<>();
         prefs = this.getSharedPreferences(getString(R.string.package_name), Context.MODE_PRIVATE);
         RetrofitClient.getInstance();
 
@@ -142,10 +144,14 @@ public class MainActivity extends AppCompatActivity
 
     public void updateListFromUrl(int url_call_case, String searchKeyword) {
        // Log.d(LOG_TAG, url);
-
-        adapter = new reddit_list_adapter(this, list);
+        adapter = new reddit_list_adapter(MainActivity.this, list);
+        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
+        bi.appBarMain.contentMain.rvRedditList.setLayoutManager(mLayoutManager);
         bi.appBarMain.contentMain.rvRedditList.setAdapter(adapter);
         adapter.SetOnItemClickListener(adapterClick);
+        adapter.notifyDataSetChanged();
+          adapter.clearAdapter();
+
         Call<ResponseBody> call;
 
         switch (url_call_case){
@@ -163,7 +169,6 @@ public class MainActivity extends AppCompatActivity
                     call = RetrofitClient.api.getHome(Constants.subredditUrl+"home.json");
 break;
         }
-        adapter.clearAdapter();
 
         call.enqueue(new Callback<ResponseBody>() {
             @Override
@@ -202,18 +207,17 @@ break;
                             }
                             if (list == null) {
                                 list = new ArrayList<>();
-                            }list
-                            .add(item);
+                            }
+                            list.add(item);
                         }
+                       adapter.notifyDataSetChanged();
+
+
                     } catch (JSONException e) {
                         e.printStackTrace();
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
-
-                    // Update list by notifying the adapter of changes
-//                    adapter.notifyDataSetChanged();
-                    adapter.updateList(list);
 
                 }
 
@@ -224,7 +228,6 @@ break;
                 Toast.makeText(MainActivity.this, "Sorry Couldn't fetch data", Toast.LENGTH_SHORT).show();
             }
         });
-        adapter.updateList(list);
         if(mTwoPane){
             if(list!=null && list.size()!=0){
                 startFragment(list.get(0));

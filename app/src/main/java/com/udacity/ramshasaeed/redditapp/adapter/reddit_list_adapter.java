@@ -16,14 +16,20 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.DataSource;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
 import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.RequestOptions;
+import com.bumptech.glide.request.target.Target;
 import com.udacity.ramshasaeed.redditapp.R;
 import com.udacity.ramshasaeed.redditapp.databinding.AdapterRedditListBinding;
 import com.udacity.ramshasaeed.redditapp.model.Reddit;
 
 import java.util.List;
+
+import static android.view.View.GONE;
 
 public class reddit_list_adapter extends RecyclerView.Adapter<reddit_list_adapter.ListRowViewHolder>{
     private static String LOG_TAG = reddit_list_adapter.class.getSimpleName();
@@ -40,17 +46,18 @@ public class reddit_list_adapter extends RecyclerView.Adapter<reddit_list_adapte
         this.context = context;
     }
 
-    @NonNull
     @Override
-    public ListRowViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public ListRowViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.adapter_reddit_list,parent,false);
 
         return new ListRowViewHolder(itemView);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ListRowViewHolder holder, int position) {
+    public void onBindViewHolder(ListRowViewHolder holder, int position) {
+
         this.holder = holder;
+        this.holder.itemView.setSelected(focusedItem == position);
         this.holder.bindViews(this.list.get(position));
 
     }
@@ -73,8 +80,8 @@ public class reddit_list_adapter extends RecyclerView.Adapter<reddit_list_adapte
         public ListRowViewHolder(View itemView) {
            super(itemView);
            bi = DataBindingUtil.bind(itemView);
-           itemView.setClickable(true);
-           itemView.setOnClickListener(this);
+           /*itemView.setClickable(true);
+           itemView.setOnClickListener(this);*/
        }
 
        @Override
@@ -84,13 +91,28 @@ public class reddit_list_adapter extends RecyclerView.Adapter<reddit_list_adapte
            }
        }
         public void bindViews(Reddit reddit){
-            holder.title.setText(Html.fromHtml(reddit.getTitle()));
-            holder.subreddit.setText("r/"+Html.fromHtml(reddit.getSubreddit()));
-            holder.comments.setText(Html.fromHtml(String.valueOf(reddit.getNumComments())));
-            holder.score.setText(Html.fromHtml(String.valueOf(reddit.getScore())));
+            bi.tvTitle.setText(Html.fromHtml(reddit.getTitle()));
+            bi.tvContent.setText(Html.fromHtml(reddit.getSubreddit()));
+            bi.tvComments.setText(String.valueOf(reddit.getNumComments()));
+            bi.tvScore.setText(String.valueOf(reddit.getScore()));
             Glide.with(context)
-                    .load(reddit.getThumbnail())
-                    .into(holder.imageView);
+                    .load(reddit.getImageUrl())
+                    .apply(new RequestOptions().override(bi.ivItemImage.getWidth(),bi.ivItemImage.getHeight()).error(R.drawable.nointernet).diskCacheStrategy(DiskCacheStrategy.ALL).centerCrop())
+                    .listener(new RequestListener<Drawable>() {
+                        @Override
+                        public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+                            bi.imgloadprogress.setVisibility(GONE);
+                            return false;
+                        }
+
+                        @Override
+                        public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                            bi.imgloadprogress.setVisibility(GONE);
+
+                            return false;
+                        }
+                    })
+                    .into(bi.ivItemImage);
         }
    }
    public interface OnItemClickListener{
