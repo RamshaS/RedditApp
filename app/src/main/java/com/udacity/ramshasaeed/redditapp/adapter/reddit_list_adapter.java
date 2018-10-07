@@ -68,20 +68,12 @@ public class reddit_list_adapter extends RecyclerView.Adapter<reddit_list_adapte
     }
 
     public class ListRowViewHolder extends  RecyclerView.ViewHolder implements View.OnClickListener{
-        protected TextView title;
-        protected TextView url;
-        protected RelativeLayout recLayout;
-        protected TextView author;
-        protected TextView subreddit, score, comments;
-        protected ImageView imageView;
-
-
        AdapterRedditListBinding bi;
         public ListRowViewHolder(View itemView) {
            super(itemView);
            bi = DataBindingUtil.bind(itemView);
-           /*itemView.setClickable(true);
-           itemView.setOnClickListener(this);*/
+           itemView.setClickable(true);
+           itemView.setOnClickListener(this);
        }
 
        @Override

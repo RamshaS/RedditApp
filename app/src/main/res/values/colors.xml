@@ -5,5 +5,7 @@
     <color name="backgroundlight">#d7ccc8</color>
     <color name="colorAccent">#FF4081</color>
     <color name="transcolorAccent">#CCFF4081</color>
+    <color name="grey">#424242</color>
+    <color name="bluishgrey">#263238</color>
 
 </resources>

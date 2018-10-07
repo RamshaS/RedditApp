@@ -23,14 +23,17 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.AdapterView;
 import android.widget.Toast;
 
+import com.google.android.gms.ads.MobileAds;
 import com.udacity.ramshasaeed.redditapp.adapter.reddit_list_adapter;
 import com.udacity.ramshasaeed.redditapp.databinding.ActivityMainBinding;
 import com.udacity.ramshasaeed.redditapp.databinding.ContentMainBinding;
 import com.udacity.ramshasaeed.redditapp.model.Reddit;
 import com.udacity.ramshasaeed.redditapp.services.RetrofitClient;
 import com.udacity.ramshasaeed.redditapp.util.Constants;
+import com.udacity.ramshasaeed.redditapp.util.NetworkUtils;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -52,7 +55,7 @@ public class MainActivity extends AppCompatActivity
     SharedPreferences prefs;
     private String subReddit = "";
     private int counter = 0;
-    public List<Reddit> list;
+    public ArrayList<Reddit> list;
     Parcelable mListState;
     private reddit_list_adapter adapter;
     private boolean mTwoPane;
@@ -89,19 +92,14 @@ public class MainActivity extends AppCompatActivity
         toggle.syncState();
 
         if (savedInstanceState == null) {
-            updateList(getResources().getString(R.string.HomePage));
-            getSupportActionBar().setTitle(R.string.HomePage);
-        } else {
-            list = savedInstanceState.getParcelableArrayList(getString(R.string.listitems));
-            mListState = savedInstanceState.getParcelable(getString(R.string.liststate_key));
-            adapter = new reddit_list_adapter(this,list);
-            LinearLayoutManager llm = new LinearLayoutManager(this);
-            llm.setOrientation(LinearLayoutManager.VERTICAL);
-            bi.appBarMain.contentMain.rvRedditList.setLayoutManager(llm);
-            bi.appBarMain.contentMain.rvRedditList.setAdapter(adapter);
-            adapter.SetOnItemClickListener(adapterClick);
-        }
+            if (NetworkUtils.isOnline(MainActivity.this)) {
+                updateList(getResources().getString(R.string.HomePage));
+                getSupportActionBar().setTitle(R.string.HomePage);
+            } else {
+                Toast.makeText(this, "No internet Connection!", Toast.LENGTH_LONG).show();
+            }
 
+        }
         bi.navView.setNavigationItemSelectedListener(this);
     }
     public void toggleMenu(boolean showMenu) {
@@ -141,7 +139,37 @@ public class MainActivity extends AppCompatActivity
         updateListFromUrl(casenum,subreddit);
 
     }
+    @Override
+    public void onResume() {
+        super.onResume();
+        setSubrreddits();
+    }
 
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        // Toast.makeText(context,"Restore is called",Toast.LENGTH_LONG).show();
+        list = savedInstanceState.getParcelableArrayList(getString(R.string.listitems));
+        mListState = savedInstanceState.getParcelable(getString(R.string.liststate_key));
+        if (list != null) {
+            setRedditAdapter(MainActivity.this, this.list);
+        }
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        outState.putParcelableArrayList(getString(R.string.listitems), this.list);
+        outState.putParcelable(getString(R.string.liststate_key),this.mListState);
+        super.onSaveInstanceState(outState);
+    }
+    private void setRedditAdapter(Context context, final ArrayList<Reddit> list) {
+        adapter = new reddit_list_adapter(context,list);
+        LinearLayoutManager llm = new LinearLayoutManager(context);
+        llm.setOrientation(LinearLayoutManager.VERTICAL);
+        bi.appBarMain.contentMain.rvRedditList.setLayoutManager(llm);
+        bi.appBarMain.contentMain.rvRedditList.setAdapter(adapter);
+        adapter.SetOnItemClickListener(adapterClick);
+    }
     public void updateListFromUrl(int url_call_case, String searchKeyword) {
        // Log.d(LOG_TAG, url);
         adapter = new reddit_list_adapter(MainActivity.this, list);
@@ -150,7 +178,7 @@ public class MainActivity extends AppCompatActivity
         bi.appBarMain.contentMain.rvRedditList.setAdapter(adapter);
         adapter.SetOnItemClickListener(adapterClick);
         adapter.notifyDataSetChanged();
-          adapter.clearAdapter();
+        adapter.clearAdapter();
 
         Call<ResponseBody> call;
 

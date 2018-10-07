@@ -21,7 +21,23 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".DetailActivity"></activity>
+        <activity android:name=".DetailActivity"
+            android:label="@string/app_name"
+            android:parentActivityName="com.udacity.ramshasaeed.redditapp.MainActivity"
+            android:theme="@style/AppTheme.NoActionBar" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.udacity.ramshasaeed.redditapp.MainActivity" />
+        </activity>
+        <provider
+            android:name="com.udacity.ramshasaeed.redditapp.database.FavouriteProvider"
+            android:authorities="com.udacity.ramshasaeed.redditapp"
+            android:enabled="true"
+            android:exported="true" />
+        <meta-data
+            android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:value="[ca-app-pub-5476505127668399~8084576917]"/>
     </application>
+
 
 </manifest>

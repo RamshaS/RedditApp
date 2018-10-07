@@ -13,17 +13,46 @@
     <string name="HomePage" translatable="false">home</string>
     <string name="liststate_key" translatable="false">listState</string>
     <string name="listitems" translatable="false">listItems</string>
+    <string translatable="true" name="header_image">Header Image</string>
 
     <string name="search">search</string>
     <string name="sort">sort</string>
     <string name="title_favourites">Favourites</string>
 
     <string name="share">Share</string>
+    <string name="open_in_browser">Open In Browser</string>
+    <string translatable="false" name="data_update_key">com.udacity.ramhshasaeed.redditapp.ACTION_DATA_UPDATED</string>
+
     <string name="hot">Hot</string>
     <string name="new1">New</string>
     <string name="top">Top</string>
     <string name="controversial">Controversial</string>
+    <string translatable="false" name="ad_unit_id">ca-app-pub-5476505127668399/8389744961</string>
+    <string translatable="true" name="post_options_menu">Post options menu</string>
+    <string translatable="true" name="post_favourite_selector">Post Favourite Selector</string>
 
     <!--for Reddit List item tool text-->
     <string name="reddit_item_title">This is Title</string>
+    <string translatable="false" name="reddit_id">id</string>
+    <string translatable="false" name="reddit_post_id">post_id</string>
+    <string translatable="false" name="reddit_title">title</string>
+    <string translatable="false" name="reddit_author">author</string>
+    <string translatable="false" name="reddit_permalink">permalink</string>
+    <string translatable="false" name="reddit_score">score</string>
+    <string translatable="false" name="reddit_num_comments">num_comments</string>
+    <string translatable="false" name="reddit_image_url">image_url</string>
+    <string translatable="false" name="reddit_url">url</string>
+    <string translatable="false" name="reddit_thumbnail">thumbnail</string>
+    <string translatable="false" name="reddit_posted_on">postedOn</string>
+    <string translatable="false" name="reddit_posted_on1">posted_on</string>
+    <string translatable="false" name="reddit_subreddit">subreddit</string>
+    <string translatable="false" name="reddit_over_18">over_18</string>
+    <string translatable="false" name="reddit_created_utc">created_utc</string>
+    <string translatable="false" name="reddit_points">points</string>
+    <string translatable="false" name="reddit_favorites">favorites</string>
+    <string translatable="false" name="arg_item_id">item_id</string>
+
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
