@@ -17,7 +17,6 @@
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context=".DetailFragment">
 
-
     <android.support.v4.widget.NestedScrollView
         android:id="@+id/mainSV"
         android:layout_width="match_parent"
@@ -58,7 +57,6 @@
                     android:layout_gravity="center_vertical"
                     android:layout_weight="0.35"
                     android:textColor="#ffffff"
-
                     android:drawablePadding="4dip"
                     />
 
@@ -75,6 +73,17 @@
                     />
 
                 <ImageButton
+                    android:id="@+id/openbrowser"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="0.15"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:clickable="true"
+                    android:src="@android:drawable/ic_dialog_info"
+                    android:contentDescription="@string/post_favourite_selector"
+                    android:focusable="true"/>
+           <ImageButton
                     android:id="@+id/addFav"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -134,6 +143,28 @@
         </LinearLayout>
 
     </android.support.v4.widget.NestedScrollView>
+<LinearLayout
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="bottom|end"
+    android:orientation="vertical">
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fav"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/fab_margin"
+        android:layout_marginBottom="@null"
+        app:srcCompat="@android:drawable/ic_menu_search"
+        />
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/share"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/fab_margin"
+        app:srcCompat="@android:drawable/ic_menu_save"
+        />
+</LinearLayout>
 
     <com.google.android.gms.ads.AdView
         android:id="@+id/adView"
