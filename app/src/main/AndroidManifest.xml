@@ -29,6 +29,23 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.udacity.ramshasaeed.redditapp.MainActivity" />
         </activity>
+        <receiver android:name=".widget.FavouriteWidget" >
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name="com.udacity.ramshasaeed.redditapp.ACTION_DATA_UPDATED" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/favourite_widget_info" />
+        </receiver>
+
+        <service
+            android:name=".widget.FavouriteWidgetRemoteViewsService"
+            android:enabled="true"
+            android:exported="false"
+            android:permission="android.permission.BIND_REMOTEVIEWS" />
+
         <provider
             android:name="com.udacity.ramshasaeed.redditapp.database.FavouriteProvider"
             android:authorities="com.udacity.ramshasaeed.redditapp"
