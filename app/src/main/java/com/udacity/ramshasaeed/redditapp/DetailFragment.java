@@ -25,6 +25,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.google.android.gms.ads.AdRequest;
@@ -88,8 +89,61 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
             extras = getArguments();
         }
 
+
+
         final String url = Constants.redditUrl + extras.getString("permalink") + Constants.jsonExt;
         Log.i(LOG_TAG, url);
+        bi.fav.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (!isFavourite) {
+
+                    ContentValues values = new ContentValues();
+                    values.put(FavContract.favourite.COLUMN_TITLE, extras.getString("title"));
+                    values.put(FavContract.favourite.COLUMN_AUTHOR, extras.getString("author"));
+                    values.put(FavContract.favourite.COLUMN_PERMALINK, extras.getString("permalink"));
+                    values.put(FavContract.favourite.COLUMN_POINTS, extras.getInt("score"));
+                    values.put(FavContract.favourite.COLUMN_COMMENTS, extras.getInt("num_comments"));
+                    values.put(FavContract.favourite.COLUMN_IMAGE_URL, extras.getString("image_url"));
+                    values.put(FavContract.favourite.COLUMN_URL, extras.getString("url"));
+                    values.put(FavContract.favourite.COLUMN_THUMBNAIL, extras.getString("thumbnail"));
+                    values.put(FavContract.favourite.COLUMN_POSTED_ON, extras.getLong("postedOn"));
+                    values.put(FavContract.favourite.COLUMN_POST_ID, id);
+                    values.put(FavContract.favourite.COLUMN_SUBREDDIT, extras.getString("subreddit"));
+                    values.put(FavContract.favourite.COLUMN_FAVORITES, 1);
+                    getContext().getContentResolver().insert(FavContract.favourite.CONTENT_URI, values);
+
+                      Toast.makeText(getContext(), "Post added to favourites", Toast.LENGTH_SHORT).show();
+                    bi.fav.setSelected(true);
+                    isFavourite = true;
+
+                } else {
+                    //Toast.makeText(getContext(),"Post removed...",Toast.LENGTH_SHORT).show();
+
+                    bi.fav.setSelected(false);
+                    isFavourite = false;
+                    //Delete from db
+                    getContext().getContentResolver().delete(FavContract.favourite.CONTENT_URI,
+                            FavContract.favourite.COLUMN_POST_ID + "=?", new String[]{String.valueOf(id)});
+                }
+
+                //Notify widget to update
+                Context context = getContext();
+                Intent dataUpdatedIntent = new Intent(getString(R.string.data_update_key))
+                        .setPackage(context.getPackageName());
+                context.sendBroadcast(dataUpdatedIntent);
+            }
+        });
+        bi.share.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent sendIntent = new Intent();
+                sendIntent.setAction(Intent.ACTION_SEND);
+                sendIntent.putExtra(Intent.EXTRA_TEXT, extras.getString("url"));
+                sendIntent.setType("text/plain");
+                startActivity(Intent.createChooser(sendIntent, "Share link"));
+            }
+        });
 
         processor = new CommentProcessor(url);
         id = extras.getString(getString(R.string.reddit_id));
@@ -123,37 +177,15 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
             bi.rvComments.getLayoutManager().onRestoreInstanceState(mListState);
             bi.rvComments.setNestedScrollingEnabled(false);
         }
-
-
-        bi.menu.setOnClickListener(new View.OnClickListener() {
+        bi.openbrowser.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                PopupMenu popup = new PopupMenu(getContext(), bi.menu);
-                //Inflating the Popup using xml file
-                popup.getMenuInflater()
-                        .inflate(R.menu.detail_menu, popup.getMenu());
-                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                    public boolean onMenuItemClick(MenuItem item) {
-                        switch (item.getItemId()) {
-                            case R.id.open:
-                                Intent i = new Intent(Intent.ACTION_VIEW);
-                                i.setData(Uri.parse(extras.getString("url")));
-                                startActivity(i);
-                                break;
-                            case R.id.share:
-                                Intent sendIntent = new Intent();
-                                sendIntent.setAction(Intent.ACTION_SEND);
-                                sendIntent.putExtra(Intent.EXTRA_TEXT, extras.getString("url"));
-                                sendIntent.setType("text/plain");
-                                startActivity(Intent.createChooser(sendIntent, "Share link"));
-                        }
-                        return true;
-                    }
-                });
-
-                popup.show();
+            public void onClick(View view) {
+                Intent i = new Intent(Intent.ACTION_VIEW);
+                i.setData(Uri.parse(extras.getString("url")));
+                startActivity(i);
             }
         });
+
 
         MobileAds.initialize(getContext(), "ca-app-pub-5476505127668399~8084576917");
         AdRequest adRequest = new AdRequest.Builder().
@@ -162,7 +194,7 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
         bi.adView.loadAd(adRequest);
 
 
-        bi.addFav.setOnClickListener(new View.OnClickListener() {
+        bi.fav.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (!isFavourite) {
@@ -183,13 +215,13 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
                     getContext().getContentResolver().insert(FavContract.favourite.CONTENT_URI, values);
 
                     //  Toast.makeText(getContext(), "Post added to favourites", Toast.LENGTH_SHORT).show();
-                    bi.addFav.setSelected(true);
+                    bi.fav.setSelected(true);
                     isFavourite = true;
 
                 } else {
                     //Toast.makeText(getContext(),"Post removed...",Toast.LENGTH_SHORT).show();
 
-                    bi.addFav.setSelected(false);
+                    bi.fav.setSelected(false);
                     isFavourite = false;
                     //Delete from db
                     getContext().getContentResolver().delete(FavContract.favourite.CONTENT_URI,
@@ -245,10 +277,10 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
 
         if (fav == 1) {
             isFavourite = true;
-            bi.addFav.setSelected(true);
+            bi.fav.setSelected(true);
         } else {
             isFavourite = false;
-            bi.addFav.setSelected(false);
+            bi.fav.setSelected(false);
         }
 
     }

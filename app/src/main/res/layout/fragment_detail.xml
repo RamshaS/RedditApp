@@ -46,7 +46,7 @@
                 android:layout_height="wrap_content"
                 android:background="@color/grey"
                 android:padding="10dp"
-                android:weightSum="1"
+                android:weightSum="4"
 
                 >
 
@@ -55,7 +55,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    android:layout_weight="0.35"
+                    android:layout_weight="1.5"
                     android:textColor="#ffffff"
                     android:drawablePadding="4dip"
                     />
@@ -65,7 +65,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    android:layout_weight="0.35"
+                    android:layout_weight="1"
                     android:paddingLeft="10dp"
                     android:paddingStart="10dp"
                     android:textColor="#ffffff"
@@ -77,32 +77,14 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    android:layout_weight="0.15"
+                    android:layout_weight="1.5"
                     android:background="?attr/selectableItemBackgroundBorderless"
                     android:clickable="true"
-                    android:src="@android:drawable/ic_dialog_info"
-                    android:contentDescription="@string/post_favourite_selector"
-                    android:focusable="true"/>
-           <ImageButton
-                    android:id="@+id/addFav"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_weight="0.15"
-                    android:background="?attr/selectableItemBackgroundBorderless"
-                    android:clickable="true"
-                    android:contentDescription="@string/post_favourite_selector"
+                    android:text="@string/open_in_browser"
+                    android:src="@android:drawable/ic_menu_agenda"
+                    android:contentDescription="@string/post_options_menu"
                     android:focusable="true"/>
 
-                <ImageButton
-                    android:id="@+id/menu"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_weight="0.15"
-                    android:background="?attr/selectableItemBackgroundBorderless"
-                    android:clickable="true"
-                    android:contentDescription="@string/post_options_menu" />
 
             </LinearLayout>
 
@@ -155,14 +137,16 @@
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/fab_margin"
         android:layout_marginBottom="@null"
-        app:srcCompat="@android:drawable/ic_menu_search"
+        android:focusable="true"
+        android:contentDescription="@string/post_favourite_selector"
+        app:srcCompat="@drawable/selector"
         />
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/share"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/fab_margin"
-        app:srcCompat="@android:drawable/ic_menu_save"
+        app:srcCompat="@android:drawable/ic_menu_share"
         />
 </LinearLayout>
 
