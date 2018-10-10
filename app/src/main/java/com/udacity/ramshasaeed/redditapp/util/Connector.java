@@ -1,6 +1,5 @@
 package com.udacity.ramshasaeed.redditapp.util;
 
-import android.graphics.BitmapFactory;
 import android.os.StrictMode;
 import android.util.Log;
 

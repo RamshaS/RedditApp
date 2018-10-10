@@ -27,7 +27,7 @@
             android:id="@+id/iv_item_image"
             android:layout_width="match_parent"
             android:layout_height="200dp"
-            android:contentDescription="post_image"/>
+            android:contentDescription="@string/post_image"/>
         <TextView
             android:id="@+id/tv_title"
             android:layout_width="match_parent"
