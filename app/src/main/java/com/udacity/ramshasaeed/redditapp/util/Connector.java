@@ -10,7 +10,6 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 public class Connector {
-    private static String LOG_TAG = Connector.class.getSimpleName();
     public static HttpURLConnection getConnection(String url){
         try{
             HttpURLConnection hcon = (HttpURLConnection)new URL(url).openConnection();
@@ -56,23 +55,6 @@ public class Connector {
             u+="?random_alien_n="+ Math.random();
         }
         return u;
-    }
-
-    public static int calculateInSampleSize(
-            BitmapFactory.Options options, int reqWidth, int reqHeight) {
-
-        final int height = options.outHeight;
-        final int width = options.outWidth;
-        int inSampleSize = 1;
-
-        if (height > reqHeight || width > reqWidth) {
-            if (width > height) {
-                inSampleSize = Math.round((float)height / (float)reqHeight);
-            } else {
-                inSampleSize = Math.round((float)width / (float)reqWidth);
-            }
-        }
-        return inSampleSize;
     }
 
 

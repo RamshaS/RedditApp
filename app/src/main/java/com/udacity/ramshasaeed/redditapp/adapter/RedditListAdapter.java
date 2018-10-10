@@ -26,7 +26,7 @@ import java.util.List;
 import static android.view.View.GONE;
 
 public class RedditListAdapter extends RecyclerView.Adapter<RedditListAdapter.ListRowViewHolder>{
-    private static String LOG_TAG = RedditListAdapter.class.getSimpleName();
+
 
     private List<Reddit> list;
     private Context context;
@@ -102,7 +102,7 @@ public class RedditListAdapter extends RecyclerView.Adapter<RedditListAdapter.Li
         }
    }
    public interface OnItemClickListener{
-        public void onItemClick(View view, int position);
+        void onItemClick(View view, int position);
    }
 
     public List<Reddit> getListItems(){
@@ -116,15 +116,6 @@ public class RedditListAdapter extends RecyclerView.Adapter<RedditListAdapter.Li
             list.clear();
             notifyDataSetChanged();
         }
-    }
-    public void updateList(List<Reddit> redditList)
-    {
-        if(list != null){
-            list.clear();
-        }
-//        this.list = redditList;
-        this.list.addAll(redditList);
-        notifyDataSetChanged();
     }
 
 }

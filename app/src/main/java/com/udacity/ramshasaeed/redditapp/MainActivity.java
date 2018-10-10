@@ -133,7 +133,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         if (subreddit.equals(getResources().getString(R.string.HomePage))) {
             subreddit = Constants.jsonEnd;
             casenum = 1;
-            toggleSort(false);
+            toggleSort();
         } else {
             toggleMenu(true);
             casenum = 2;
@@ -314,12 +314,12 @@ break;
         this.sortMenu = menu;
         MenuItem search = menu.findItem(R.id.menuSearch);
         mSearchView= (SearchView) search.getActionView();
-        setupSearchView(mSearchView);
-        toggleSort(false);
+        setupSearchView();
+        toggleSort();
         return true;
     }
 
-    public void toggleSort(boolean showMenu) {
+    public void toggleSort() {
         if (sortMenu == null)
             return;
         Log.d(LOG_TAG, "toggleSort()");
@@ -339,7 +339,7 @@ break;
             }
         }
     }
-    private void setupSearchView(final SearchView searchItem) {
+    private void setupSearchView() {
         mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
 
             @Override
@@ -367,7 +367,7 @@ break;
         if (subreddit.equals(getResources().getString(R.string.HomePage))) {
             subreddit = searchQuery;
             casenum = 3;
-            toggleSort(false);
+            toggleSort();
         } else {
             toggleMenu(true);
             subreddit = subreddit + "/"+searchQuerySetup;
@@ -405,7 +405,7 @@ break;
 
     public void startFragment(Reddit item ){
         Log.d(LOG_TAG,"Starting the fragment.");
-        Bundle arguments = getBundleForRedditItem(item);
+        getBundleForRedditItem(item);
     }
     public Bundle getBundleForRedditItem(Reddit item){
         Bundle arguments = new Bundle();

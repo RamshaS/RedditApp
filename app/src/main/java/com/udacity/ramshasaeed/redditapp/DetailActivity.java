@@ -14,8 +14,6 @@ import com.udacity.ramshasaeed.redditapp.databinding.ActivityDetailBinding;
 public class DetailActivity extends AppCompatActivity {
     private static String LOG_TAG = DetailActivity.class.getSimpleName();
 
-    String id;
-    Bundle extras;
 ActivityDetailBinding bi;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,10 +22,7 @@ ActivityDetailBinding bi;
         bi.setCallback(this);
 
         setSupportActionBar(bi.toolbar);
-        extras = getIntent().getExtras();
-        id = extras.getString(getString(R.string.reddit_id));
 
-        bi.toolbar.setTitle(extras.getString(getString(R.string.reddit_subreddit)));
         bi.toolbar.setTitle(getString(R.string.app_name));
 
 

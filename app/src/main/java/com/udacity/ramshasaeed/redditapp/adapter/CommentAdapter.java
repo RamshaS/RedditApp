@@ -20,7 +20,6 @@ import java.util.ArrayList;
 
 
 public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentHolder> {
-    private static String LOG_TAG = CommentAdapter.class.getSimpleName();
     private ArrayList<Comment> list;
     private Context context;
     CommentHolder holder;
@@ -42,10 +41,6 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentH
         this.holder.bindViews(this.list.get(position));
     }
 
-    public void clearAdapter() {
-        list.clear();
-        notifyDataSetChanged();
-    }
 
     @Override
     public int getItemCount() {
@@ -56,8 +51,6 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentH
     public class CommentHolder extends RecyclerView.ViewHolder{
 
         protected TextView author, body, postedOn, points;
-        LinearLayout container;
-        RelativeLayout levelIndicator;
         CommentItemBinding bi;
 
 
@@ -69,7 +62,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentH
 
         public void bindViews(Comment comment) {
             bi.author.setText(comment.getAuthor());
-            bi.points.setText(comment.getPoints() + " Points");
+            bi.points.setText(comment.getPoints() + context.getString(R.string.points));
             bi.body.setText(comment.getHtmlText());
             bi.postedOn.setText(comment.getPostedOn());
             bi.cardLinear.setPadding(comment.getLevel() * 20, 0, 0, 0);

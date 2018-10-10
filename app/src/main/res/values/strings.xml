@@ -1,15 +1,8 @@
 <resources>
     <string name="app_name">Reddit App</string>
     <string name="package_name">com.udacity.ramshasaeed.redditapp</string>
-    <string name="first_run" translatable="false">firstrun</string>
-    <string name="subreddit_pref_key" translatable="false">SUBREDDIT_PREF_KEY</string>
-    <string name="initial_subs" translatable="false">home,all,announcements,Art,AskReddit,askscience,aww,blog,books,creepy,dataisbeautiful,DIY,Documentaries,EarthPorn,explainlikeimfive,Fitness,food,funny,Futurology,gadgets,gaming,GetMotivated,gifs,history,IAmA,InternetIsBeautiful,Jokes,LifeProTips,listentothis,mildlyinteresting,movies,Music,news,nosleep,nottheonion,OldSchoolCool,personalfinance,philosophy,photoshopbattles,pics,science,Showerthoughts,space,sports,television,tifu,todayilearned,TwoXChromosomes,UpliftingNews,videos,worldnews,WritingPrompts</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="nav_header_title">Android Studio</string>
-    <string name="nav_header_subtitle">android.studio@android.com</string>
-    <string name="nav_header_desc">Navigation header</string>
-    <string name="action_settings">Settings</string>
     <string name="HomePage" translatable="false">home</string>
     <string name="liststate_key" translatable="false">listState</string>
     <string name="listitems" translatable="false">listItems</string>
@@ -21,9 +14,13 @@
     <string name="title_favourites">Favourites</string>
     <string name="no_favourites">No Favourites</string>
     <string name="no_internet">No internet Connection!</string>
+    <string name="post_image">This post contains image</string>
     <string name="data_fetch">Sorry Couldnt fetch data</string>
+    <string name="content">Content</string>
+    <string name="comments">Comments</string>
+    <string name="score">Score</string>
+    <string name="points">Points</string>
 
-    <string name="share">Share</string>
     <string name="open_in_browser">Open In Browser</string>
     <string translatable="false" name="data_update_key">com.udacity.ramhshasaeed.redditapp.ACTION_DATA_UPDATED</string>
 
@@ -41,25 +38,8 @@
     <!--for Reddit List item tool text-->
     <string name="reddit_item_title">This is Title</string>
     <string translatable="false" name="reddit_id">id</string>
-    <string translatable="false" name="reddit_post_id">post_id</string>
     <string translatable="false" name="reddit_title">title</string>
-    <string translatable="false" name="reddit_author">author</string>
-    <string translatable="false" name="reddit_permalink">permalink</string>
-    <string translatable="false" name="reddit_score">score</string>
-    <string translatable="false" name="reddit_num_comments">num_comments</string>
-    <string translatable="false" name="reddit_image_url">image_url</string>
-    <string translatable="false" name="reddit_url">url</string>
-    <string translatable="false" name="reddit_thumbnail">thumbnail</string>
-    <string translatable="false" name="reddit_posted_on">postedOn</string>
-    <string translatable="false" name="reddit_posted_on1">posted_on</string>
-    <string translatable="false" name="reddit_subreddit">subreddit</string>
-    <string translatable="false" name="reddit_over_18">over_18</string>
-    <string translatable="false" name="reddit_created_utc">created_utc</string>
-    <string translatable="false" name="reddit_points">points</string>
-    <string translatable="false" name="reddit_favorites">favorites</string>
     <string translatable="false" name="arg_item_id">item_id</string>
 
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

@@ -14,11 +14,8 @@ public class FavouriteProvider extends ContentProvider {
     private static String LOG_TAG = FavouriteProvider.class.getSimpleName();
     static final String PROVIDER_NAME = "com.udacity.ramshasaeed.redditapp";
     static final String URL = "content://" + PROVIDER_NAME + "/favourite";
-    static final Uri CONTENT_URI = Uri.parse(URL);
     private static final int TABLE = 1;
     private static final int TABLE_ID = 2;
-    static final String _ID = "_id";
-    static final String AUTHOR = "author";
     private static final UriMatcher mUriMatcher;
     private SQLiteOpenHelper mOpenHelper;
     static {

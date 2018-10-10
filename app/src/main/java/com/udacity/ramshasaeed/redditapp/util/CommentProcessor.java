@@ -37,8 +37,8 @@ public class CommentProcessor {
     private String getDate(long time) {
         Calendar cal = Calendar.getInstance(Locale.ENGLISH);
         cal.setTimeInMillis(time*1000);
-        String date = DateFormat.format("HH:mm  dd/MM/yy", cal).toString();
-        return date;
+        return DateFormat.format("HH:mm  dd/MM/yy", cal).toString();
+
 
     }
     private void process(ArrayList<Comment> comments

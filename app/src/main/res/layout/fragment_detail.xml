@@ -148,6 +148,7 @@
         android:layout_margin="@dimen/fab_margin"
         android:contentDescription="@string/post_share_selector"
         app:srcCompat="@android:drawable/ic_menu_share"
+
         />
 </LinearLayout>
 

@@ -26,7 +26,8 @@
         <ImageView
             android:id="@+id/iv_item_image"
             android:layout_width="match_parent"
-            android:layout_height="200dp" />
+            android:layout_height="200dp"
+            android:contentDescription="post_image"/>
         <TextView
             android:id="@+id/tv_title"
             android:layout_width="match_parent"
@@ -56,7 +57,7 @@
             android:gravity="center"
             android:textAppearance="@style/TextAppearance.AppCompat.Body1"
             android:paddingStart="20dp"
-            android:text="Content"
+            android:text="@string/content"
             android:layout_weight="0.3"/>
 
         <TextView
@@ -67,7 +68,7 @@
             android:layout_weight="0.35"
             android:foregroundGravity="center_horizontal"
             android:gravity="center"
-            android:text="comments"
+            android:text="@string/comments"
             android:paddingStart="30sp"
             android:paddingEnd="30sp"
             />
@@ -81,7 +82,7 @@
             android:textAppearance="@style/TextAppearance.AppCompat.Body1"
             android:layout_weight="0.35"
             android:gravity="center"
-            android:text="score"
+            android:text="@string/score"
             android:layout_gravity="center"
             android:foregroundGravity="center"
             />

@@ -156,9 +156,6 @@ public class Reddit implements Parcelable
         this.numComments = numComments;
     }
 
-    public Boolean getOver18() {
-        return over18;
-    }
 
     public void setOver18(Boolean over18) {
         this.over18 = over18;

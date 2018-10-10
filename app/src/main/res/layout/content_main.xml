@@ -21,6 +21,7 @@
         android:layout_height="wrap_content"
         android:visibility="gone"
         tools:visibility="visible"
+        android:contentDescription="@string/no_internet"
         />
 
     <android.support.v7.widget.RecyclerView
