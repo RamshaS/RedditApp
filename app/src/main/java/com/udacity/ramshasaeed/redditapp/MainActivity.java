@@ -26,7 +26,10 @@ import android.widget.AdapterView;
 import android.widget.Toast;
 
 import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 import com.udacity.ramshasaeed.redditapp.adapter.reddit_list_adapter;
+import com.udacity.ramshasaeed.redditapp.analytics.AnalyticsApplication;
 import com.udacity.ramshasaeed.redditapp.database.FavContract;
 import com.udacity.ramshasaeed.redditapp.databinding.ActivityMainBinding;
 import com.udacity.ramshasaeed.redditapp.model.Reddit;
@@ -60,9 +63,17 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     private String sortBy = "";
     private SearchView mSearchView;
     private Menu sortMenu;
+    private Tracker mTracker;
+
     private static String LOG_TAG = MainActivity.class.getSimpleName();
 
+    @Override
+    public void onResume() {
+        super.onResume();
 
+        mTracker.setScreenName("Image~List Activity");
+        mTracker.send(new HitBuilders.ScreenViewBuilder().build());
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -73,7 +84,10 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         prefs = this.getSharedPreferences(getString(R.string.package_name), Context.MODE_PRIVATE);
         RetrofitClient.getInstance();
 
-        setSubrreddits();
+
+        AnalyticsApplication application = (AnalyticsApplication) getApplication();
+        mTracker = application.getDefaultTracker();
+
 
 
         setNavigationView();
@@ -131,11 +145,6 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         updateListFromUrl(casenum,subreddit);
 
     }
-    @Override
-    public void onResume() {
-        super.onResume();
-        setSubrreddits();
-    }
 
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
@@ -163,7 +172,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         adapter.SetOnItemClickListener(adapterClick);
     }
     public void updateListFromUrl(int url_call_case, String searchKeyword) {
-       // Log.d(LOG_TAG, url);
+
         adapter = new reddit_list_adapter(MainActivity.this, list);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
         bi.appBarMain.contentMain.rvRedditList.setLayoutManager(mLayoutManager);
@@ -267,14 +276,7 @@ break;
             @Override
             public boolean onNavigationItemSelected(MenuItem menuItem) {
 
-                if (menuItem.getGroupId() == R.id.grpsubs) {
-                  /*  Intent openSetting = new Intent(getBaseContext(), ManageSubs.class);
-                    openSetting.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    getBaseContext().startActivity(openSetting);
-                    bi.drawerLayout.closeDrawers();
-                    */
-                    return true;
-                }
+
                 if (menuItem.getGroupId() == R.id.groupFav) {
                     initLoader();
                     bi.appBarMain.toolbar.setTitle(getString(R.string.title_favourites));
@@ -289,24 +291,7 @@ break;
             }
         });
     }
-    private void setSubrreddits() {
-        MenuItem saveThis = bi.navView.getMenu().getItem(0);
-        bi.navView.getMenu().removeGroup(500);
-        if (prefs.getBoolean(getString(R.string.first_run), true)) {
-            // Do first run stuff here then set 'firstrun' as false
-            // using the following line to edit/commit prefs
-            prefs.edit().putString(getString(R.string.subreddit_pref_key), getString(R.string.initial_subs)).commit();
-            prefs.edit().putBoolean(getString(R.string.first_run), false).commit();
-        }
 
-
-        String subString = prefs.getString(getString(R.string.subreddit_pref_key), "");
-        List<String> mItems = Arrays.asList(subString.split(","));
-        for (int i = 0; i < mItems.size(); i++) {
-            MenuItem item = bi.navView.getMenu().add(500, Menu.NONE, Menu.NONE, mItems.get(i));
-        }
-        bi.navView.setItemIconTintList(null);
-    }
 
     @Override
     public void onBackPressed() {
@@ -334,7 +319,7 @@ break;
         if (sortMenu == null)
             return;
         Log.d(LOG_TAG, "toggleSort()");
-        toggleSelectiveMenu(showMenu, getString(R.string.sort));
+        toggleSelectiveMenu(true, getString(R.string.sort));
 //        MenuItem item = (MenuItem) findViewById(R.id.menuSort);
 //        for()
 //        if(item!=null){
@@ -393,11 +378,11 @@ break;
     }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (subReddit.equals(getResources().getString(R.string.HomePage))
+       /* if (subReddit.equals(getResources().getString(R.string.HomePage))
                 || subReddit.equals(getResources().getString(R.string.title_favourites))) {
             Toast.makeText(this, "Sorting cannot be applied to Home and Favourites.", Toast.LENGTH_LONG).show();
             return true;
-        }
+        }*/
         switch (item.getItemId()) {
             case R.id.menuSortHot:
                 sortBy = "hot";

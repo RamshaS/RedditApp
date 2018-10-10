@@ -12,15 +12,6 @@
             android:icon="@drawable/redheart"
             android:title="@string/title_favourites" />
     </group>
-    <group android:id="@+id/grpsubs">
 
-        <item
-            android:id="@+id/managesubreddit"
-            android:icon="@drawable/ic_menu_manage"
-            android:title="@string/reddit_item_title" />
-    </group>
-    <group android:id="@+id/groupkeywords">
-
-    </group>
 
 </menu>

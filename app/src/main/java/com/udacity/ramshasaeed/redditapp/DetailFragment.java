@@ -31,8 +31,10 @@ import com.bumptech.glide.Glide;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 import com.udacity.ramshasaeed.redditapp.adapter.CommentAdapter;
+import com.udacity.ramshasaeed.redditapp.analytics.AnalyticsApplication;
 import com.udacity.ramshasaeed.redditapp.database.FavContract;
 import com.udacity.ramshasaeed.redditapp.databinding.FragmentDetailBinding;
 import com.udacity.ramshasaeed.redditapp.model.Comment;
@@ -51,9 +53,10 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
 
     Parcelable mListState;
     Bundle extras;
+    private Tracker mTracker;
 
     RecyclerView.LayoutManager mLayoutManager;
-    private Tracker mTracker;
+
 
     CommentProcessor processor;
     ArrayList<Comment> comments;
@@ -69,6 +72,14 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+    }
+    @Override
+    public void onResume() {
+        super.onResume();
+        mTracker.setScreenName("Image~" + "Detail Activity");
+        mTracker.send(new HitBuilders.ScreenViewBuilder().build());
+
 
     }
 
@@ -192,6 +203,10 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
                 addTestDevice(AdRequest.DEVICE_ID_EMULATOR).
                 build();
         bi.adView.loadAd(adRequest);
+
+        // Obtain the shared Tracker instance.
+        AnalyticsApplication application = (AnalyticsApplication) getActivity().getApplication();
+        mTracker = application.getDefaultTracker();
 
 
         bi.fav.setOnClickListener(new View.OnClickListener() {
