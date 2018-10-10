@@ -124,7 +124,7 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
                     values.put(FavContract.favourite.COLUMN_FAVORITES, 1);
                     getContext().getContentResolver().insert(FavContract.favourite.CONTENT_URI, values);
 
-                      Toast.makeText(getContext(), "Post added to favourites", Toast.LENGTH_SHORT).show();
+                      Toast.makeText(getContext(), getString(R.string.title_favourites), Toast.LENGTH_SHORT).show();
                     bi.fav.setSelected(true);
                     isFavourite = true;
 

@@ -58,14 +58,14 @@
                         android:id="@+id/postedOn"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:paddingLeft="10dp"
+                        android:paddingStart="10dp"
                         android:text="" />
 
                     <TextView
                         android:id="@+id/points"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:paddingLeft="10dp" />
+                        android:paddingStart="10dp" />
 
 
                 </LinearLayout>

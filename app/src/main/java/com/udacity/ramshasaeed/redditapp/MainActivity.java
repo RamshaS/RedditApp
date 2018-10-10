@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.content.Loader;
 import android.content.SharedPreferences;
 import android.database.Cursor;
-import android.database.DatabaseUtils;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.os.Parcelable;
@@ -22,13 +21,11 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.AdapterView;
 import android.widget.Toast;
 
-import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
-import com.udacity.ramshasaeed.redditapp.adapter.reddit_list_adapter;
+import com.udacity.ramshasaeed.redditapp.adapter.RedditListAdapter;
 import com.udacity.ramshasaeed.redditapp.analytics.AnalyticsApplication;
 import com.udacity.ramshasaeed.redditapp.database.FavContract;
 import com.udacity.ramshasaeed.redditapp.databinding.ActivityMainBinding;
@@ -43,7 +40,6 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import okhttp3.ResponseBody;
@@ -58,12 +54,14 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     private int counter = 0;
     public ArrayList<Reddit> list;
     Parcelable mListState;
-    private reddit_list_adapter adapter;
+    private RedditListAdapter adapter;
     private boolean mTwoPane;
     private String sortBy = "";
     private SearchView mSearchView;
     private Menu sortMenu;
     private Tracker mTracker;
+    private static final String CURRENT_LIST_VIEW_POSITION = "currentpos";
+    int current_pos = 0;
 
     private static String LOG_TAG = MainActivity.class.getSimpleName();
 
@@ -103,7 +101,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
                 updateList(getResources().getString(R.string.HomePage));
                 getSupportActionBar().setTitle(R.string.HomePage);
             } else {
-                Toast.makeText(this, "No internet Connection!", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, getString(R.string.no_internet), Toast.LENGTH_LONG).show();
             }
 
         }
@@ -152,31 +150,37 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         // Toast.makeText(context,"Restore is called",Toast.LENGTH_LONG).show();
         list = savedInstanceState.getParcelableArrayList(getString(R.string.listitems));
         mListState = savedInstanceState.getParcelable(getString(R.string.liststate_key));
+        current_pos = savedInstanceState.getInt(CURRENT_LIST_VIEW_POSITION);
         if (list != null) {
+
             setRedditAdapter(MainActivity.this, this.list);
         }
     }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
         outState.putParcelableArrayList(getString(R.string.listitems), this.list);
         outState.putParcelable(getString(R.string.liststate_key),this.mListState);
-        super.onSaveInstanceState(outState);
+        outState.putInt(CURRENT_LIST_VIEW_POSITION, bi.appBarMain.contentMain.rvRedditList.getScrollState());
+
     }
     private void setRedditAdapter(Context context, final ArrayList<Reddit> list) {
-        adapter = new reddit_list_adapter(context,list);
+        adapter = new RedditListAdapter(context,list);
         LinearLayoutManager llm = new LinearLayoutManager(context);
         llm.setOrientation(LinearLayoutManager.VERTICAL);
         bi.appBarMain.contentMain.rvRedditList.setLayoutManager(llm);
         bi.appBarMain.contentMain.rvRedditList.setAdapter(adapter);
+        bi.appBarMain.contentMain.rvRedditList.scrollToPosition(current_pos);
         adapter.SetOnItemClickListener(adapterClick);
     }
     public void updateListFromUrl(int url_call_case, String searchKeyword) {
 
-        adapter = new reddit_list_adapter(MainActivity.this, list);
+        adapter = new RedditListAdapter(MainActivity.this, list);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
         bi.appBarMain.contentMain.rvRedditList.setLayoutManager(mLayoutManager);
         bi.appBarMain.contentMain.rvRedditList.setAdapter(adapter);
+        bi.appBarMain.contentMain.rvRedditList.scrollToPosition(current_pos);
         adapter.SetOnItemClickListener(adapterClick);
         adapter.notifyDataSetChanged();
         adapter.clearAdapter();
@@ -202,7 +206,7 @@ break;
         call.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                Toast.makeText(MainActivity.this, "Completed!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.this, getString(R.string.completion_status), Toast.LENGTH_SHORT).show();
 
                 if (response.isSuccessful()) {
                     try {
@@ -254,7 +258,7 @@ break;
 
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
-                Toast.makeText(MainActivity.this, "Sorry Couldn't fetch data", Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.this, getString(R.string.data_fetch), Toast.LENGTH_SHORT).show();
             }
         });
         if(mTwoPane){
@@ -320,11 +324,6 @@ break;
             return;
         Log.d(LOG_TAG, "toggleSort()");
         toggleSelectiveMenu(true, getString(R.string.sort));
-//        MenuItem item = (MenuItem) findViewById(R.id.menuSort);
-//        for()
-//        if(item!=null){
-//            item.setVisible(showMenu);
-//        }
 
     }
 
@@ -407,14 +406,6 @@ break;
     public void startFragment(Reddit item ){
         Log.d(LOG_TAG,"Starting the fragment.");
         Bundle arguments = getBundleForRedditItem(item);
-/*
-        DetailFragment fragment = new DetailFragment();
-
-        fragment.setArguments(arguments);
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.reddititem_detail_container, fragment)
-                .commit();
-  */
     }
     public Bundle getBundleForRedditItem(Reddit item){
         Bundle arguments = new Bundle();
@@ -432,7 +423,7 @@ break;
 
         return arguments;
     }
-    public reddit_list_adapter.OnItemClickListener adapterClick = new reddit_list_adapter.OnItemClickListener() {
+    public RedditListAdapter.OnItemClickListener adapterClick = new RedditListAdapter.OnItemClickListener() {
         @Override
         public void onItemClick(View view, int position) {
 
@@ -515,8 +506,9 @@ break;
     }
 
     public void updateViewWithResults(List<Reddit> result) {
-        adapter = new reddit_list_adapter(this, result);
+        adapter = new RedditListAdapter(this, result);
         bi.appBarMain.contentMain.rvRedditList.setAdapter(adapter);
+        bi.appBarMain.contentMain.rvRedditList.scrollToPosition(current_pos);
 
     }
 }

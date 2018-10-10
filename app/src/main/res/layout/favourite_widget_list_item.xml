@@ -22,8 +22,8 @@
         android:minHeight="?android:attr/listPreferredItemHeight"
         android:orientation="horizontal"
         android:padding="5dp"
-        android:paddingLeft="@dimen/abc_list_item_padding_horizontal_material"
-        android:paddingRight="@dimen/abc_list_item_padding_horizontal_material">
+        android:paddingStart="@dimen/abc_list_item_padding_horizontal_material"
+        android:paddingEnd="@dimen/abc_list_item_padding_horizontal_material">
 
 
         <LinearLayout
@@ -62,7 +62,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:focusable="false"
-                    android:paddingRight="10sp"
+                    android:paddingEnd="10sp"
                     />
             <TextView
                 android:id="@+id/widgetPoints"
@@ -87,7 +87,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:focusable="false"
-                    android:paddingRight="10sp"
+                    android:paddingEnd="10sp"
                     />
             <TextView
                 android:id="@+id/widgetComments"

@@ -15,10 +15,13 @@
     <string name="listitems" translatable="false">listItems</string>
     <string translatable="true" name="header_image">Header Image</string>
 
+    <string name="completion_status">Completed!</string>
     <string name="search">search</string>
     <string name="sort">sort</string>
     <string name="title_favourites">Favourites</string>
     <string name="no_favourites">No Favourites</string>
+    <string name="no_internet">No internet Connection!</string>
+    <string name="data_fetch">Sorry Couldnt fetch data</string>
 
     <string name="share">Share</string>
     <string name="open_in_browser">Open In Browser</string>
@@ -31,6 +34,7 @@
     <string translatable="false" name="ad_unit_id">ca-app-pub-5476505127668399/8389744961</string>
     <string translatable="true" name="post_options_menu">Post options menu</string>
     <string translatable="true" name="post_favourite_selector">Post Favourite Selector</string>
+    <string translatable="true" name="post_share_selector">Post Share Selector</string>
     <string name="image_icon_to_show_points_for_the_reddit_item">Image icon to show points for the reddit item</string>
     <string name="image_icon_to_show_number_of_comments_for_reddit_item">Image icon to show number of comments for reddit item.</string>
 

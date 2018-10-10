@@ -3,23 +3,17 @@ package com.udacity.ramshasaeed.redditapp.adapter;
 import android.content.Context;
 import android.databinding.DataBindingUtil;
 import android.graphics.drawable.Drawable;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ImageView;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.DataSource;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.engine.GlideException;
-import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.Target;
@@ -31,8 +25,8 @@ import java.util.List;
 
 import static android.view.View.GONE;
 
-public class reddit_list_adapter extends RecyclerView.Adapter<reddit_list_adapter.ListRowViewHolder>{
-    private static String LOG_TAG = reddit_list_adapter.class.getSimpleName();
+public class RedditListAdapter extends RecyclerView.Adapter<RedditListAdapter.ListRowViewHolder>{
+    private static String LOG_TAG = RedditListAdapter.class.getSimpleName();
 
     private List<Reddit> list;
     private Context context;
@@ -41,7 +35,7 @@ public class reddit_list_adapter extends RecyclerView.Adapter<reddit_list_adapte
 
     private int focusedItem = 0;
 
-    public reddit_list_adapter(Context context, List<Reddit> list) {
+    public RedditListAdapter(Context context, List<Reddit> list) {
         this.list = list;
         this.context = context;
     }
